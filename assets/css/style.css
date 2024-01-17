@@ -1,3 +1,12 @@
 #recentSearches li:hover {
     color:blue
 }
+
+#weatherIcon {
+display: none;
+}
+
+h6 {
+display: none;
+}
+
