@@ -107,18 +107,18 @@ function updateForecastUI(data) {
         
         const kelvinTemp = forecastItem.main.temp;
         const celsiusTemp = Math.round(kelvinToCelsius(kelvinTemp));
-
-        // Adds a check to ensure temperature values are reasonable
-        if (celsiusTemp > -100 && celsiusTemp < 100) {
-            const fahrenheitTemp = convertCelsiusToFahrenheit(celsiusTemp);
-            const description = forecastItem.weather[0].description;
-            const humidity = forecastItem.main.humidity;
-            const windSpeed = forecastItem.wind.speed;
+        const fahrenheitTemp = Math.round(convertCelsiusToFahrenheit(celsiusTemp));
+        const description = forecastItem.weather[0].description;
+        const humidity = forecastItem.main.humidity;
+        const windSpeed = forecastItem.wind.speed;
+        const iconCode = forecastItem.weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
 
         // Create HTML elements for forecast item
         const forecastItemHTML = `
             <li>
                 <strong>Date:</strong> ${date} |
+                <img src="${iconUrl}" alt="Weather Icon"> |
                 <strong>Temperature:</strong> ${fahrenheitTemp}&deg;F (${celsiusTemp}&deg;C) |
                 <strong>Humidity:</strong> ${humidity}% |
                 <strong>Wind Speed:</strong> ${windSpeed} m/s |
@@ -128,11 +128,8 @@ function updateForecastUI(data) {
 
         // Appends the forecast item to the forecastDisplay container
         forecastDisplay.append(forecastItemHTML);
-        } else {
-            console.error('Invalid temperature value:', celsiusTemp);
         }
     }
-}
 
 // Function to update the UI with recent searches
 function updateRecentSearches(city) {
