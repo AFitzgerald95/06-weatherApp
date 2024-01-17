@@ -15,6 +15,9 @@ $('form').submit(function (event) {
 
     // Calls the function to fetch weather data
     getWeatherData(userLocation);
+
+    // Updates the recent searches
+    updateRecentSearches(userLocation);
 });
 
 function getWeatherData(location) {
@@ -30,7 +33,7 @@ function getWeatherData(location) {
             return response.json();
         })
         .then(data => {
-            // Call a function to update the current weather UI
+            // Function to update the current weather UI
             updateCurrentWeatherUI(data);
         })
         .catch(error => {
@@ -45,7 +48,7 @@ function getWeatherData(location) {
             return response.json();
         })
         .then(data => {
-            // Call a function to update the 5-day forecast UI
+            // Function to update the 5-day forecast UI
             updateForecastUI(data);
         })
         .catch(error => {
@@ -66,6 +69,8 @@ function kelvinToCelsius(kelvin) {
 
 // Function to update the UI with current weather data
 function updateCurrentWeatherUI(data) {
+    console.log('Weather Data:', data);
+
     // Updates the weatherDisplay with the relevant data
     const kelvinTemp = data.main.temp;
     const celsiusTemp = Math.round(kelvinToCelsius(kelvinTemp));
@@ -74,11 +79,14 @@ function updateCurrentWeatherUI(data) {
     if (celsiusTemp > -100 && celsiusTemp < 100) {
         const fahrenheitTemp = convertCelsiusToFahrenheit(celsiusTemp);
 
-    weatherDisplay.html(`
-        Temperature (Celsius): ${celsiusTemp}&deg;C<br>
-        Temperature (Fahrenheit): ${fahrenheitTemp}&deg;F<br>
-        Description: ${data.weather[0].description}
-    `);
+
+        // Updates with information about the current city
+        $('#currentCityName').text(data.name);
+        $('#currentDate').text(dayjs().format('MMMM D, YYYY'));
+        $('#weatherIcon').attr('src', `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`);
+        $('#currentTemperature').html(`Temperature: ${fahrenheitTemp}&deg;F (${celsiusTemp}&deg;C)`);
+        $('#currentHumidity').text(`Humidity: ${data.main.humidity}%`);
+        $('#currentWindSpeed').text(`Wind Speed: ${data.wind.speed} m/s`);
     } else {
         console.error('Invalid temperature value:', celsiusTemp);
     }
@@ -93,8 +101,10 @@ function updateForecastUI(data) {
     for (let i = 0; i < data.list.length; i += 8) {
         const forecastItem = data.list[i];
 
-        // Extract relevant information
-        const date = forecastItem.dt_txt;
+        // Extracts relevant information
+        const timestamp = forecastItem.dt * 1000;
+        const date = dayjs(timestamp).format('dddd, MMM D');
+        
         const kelvinTemp = forecastItem.main.temp;
         const celsiusTemp = Math.round(kelvinToCelsius(kelvinTemp));
 
@@ -102,12 +112,16 @@ function updateForecastUI(data) {
         if (celsiusTemp > -100 && celsiusTemp < 100) {
             const fahrenheitTemp = convertCelsiusToFahrenheit(celsiusTemp);
             const description = forecastItem.weather[0].description;
+            const humidity = forecastItem.main.humidity;
+            const windSpeed = forecastItem.wind.speed;
 
         // Create HTML elements for forecast item
         const forecastItemHTML = `
             <li>
                 <strong>Date:</strong> ${date} |
-                <strong>Temperature:</strong> ${celsiusTemp}&deg;C (${fahrenheitTemp}&deg;F) |
+                <strong>Temperature:</strong> ${fahrenheitTemp}&deg;F (${celsiusTemp}&deg;C) |
+                <strong>Humidity:</strong> ${humidity}% |
+                <strong>Wind Speed:</strong> ${windSpeed} m/s |
                 <strong>Description:</strong> ${description}
             </li>
         `;
@@ -120,3 +134,38 @@ function updateForecastUI(data) {
     }
 }
 
+// Function to update the UI with recent searches
+function updateRecentSearches(city) {
+    // Gets the existing searches from localStorage or creates an empty array
+    const recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+
+    // Adds the new city to the recent searches
+    recentSearches.unshift(city);
+
+    // if statement that only keeps the 5 most recent searches
+    if (recentSearches.length > 5) {
+        recentSearches.pop();
+    }
+
+    // Saves the updated recent searches to localStorage
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+
+    // Updates the DOM with the recent searches
+    const recentSearchesList = $('#recentSearches');
+    recentSearchesList.empty();
+    recentSearches.forEach(search => {
+        const listItem = $('<li>').text(search);
+
+        // Adds a click event listener to each list item
+        listItem.click(function() {
+            // Sets the selected city in the search bar
+            locationInput.val(search);
+            
+            // Triggers the form submission (simulates a user clicking the search button)
+            $('form').submit();
+        });
+
+        recentSearchesList.append(listItem);
+    });
+}
+ 

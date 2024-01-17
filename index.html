@@ -17,13 +17,23 @@
             <input type="text" id="location" placeholder="Enter A Location...">
             <button type="submit" id="searchBtn">Search</button> 
         </form>
-        
-        <div id="weatherDisplay">
-            <!-- Current weather conditions will be displayed here -->
+        <br>
+        <div id="weatherDisplay"><!-- Current weather conditions will be displayed here -->
+            <h2 id="currentCityName"></h2>
+            <p id="currentDate"></p>
+            <img id="weatherIcon" alt="Weather Icon">
+            <p id="currrentTemperature"></p>
+            <p id="currrentHumidity"></p>
+            <p id="currrentWindSpeed"></p>
         </div>
-
+        <br>
         <div id="forecastDisplay">
             <ol id="forecast"><!-- 5-day forecast will be displayed here --></ol>
+        </div>
+        <br>
+        <div id="recentSearchesList">
+            <h6>Search History</h6>
+            <ul id="recentSearches"><!-- Recent searches list is displayed here --></ul>
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
