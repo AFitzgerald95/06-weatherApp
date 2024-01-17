@@ -53,10 +53,35 @@ function getWeatherData(location) {
         });
 }
 
+// Function to convert Celsius to Fahrenheit
+function convertCelsiusToFahrenheit(celsius) {
+    return (celsius * 9/5) + 32;
+}
+
+
+// Function to convert Kelvin to Celsius
+function kelvinToCelsius(kelvin) {
+        return kelvin - 273.15;
+}
+
 // Function to update the UI with current weather data
 function updateCurrentWeatherUI(data) {
     // Updates the weatherDisplay with the relevant data
-    weatherDisplay.html(`Temperature: ${data.main.temp}&deg;C, Description: ${data.weather[0].description}`);
+    const kelvinTemp = data.main.temp;
+    const celsiusTemp = Math.round(kelvinToCelsius(kelvinTemp));
+
+    // Adds a check to ensure temperature values are reasonable
+    if (celsiusTemp > -100 && celsiusTemp < 100) {
+        const fahrenheitTemp = convertCelsiusToFahrenheit(celsiusTemp);
+
+    weatherDisplay.html(`
+        Temperature (Celsius): ${celsiusTemp}&deg;C<br>
+        Temperature (Fahrenheit): ${fahrenheitTemp}&deg;F<br>
+        Description: ${data.weather[0].description}
+    `);
+    } else {
+        console.error('Invalid temperature value:', celsiusTemp);
+    }
 }
 
 // Function to update the UI with 5-day forecast data
@@ -70,20 +95,28 @@ function updateForecastUI(data) {
 
         // Extract relevant information
         const date = forecastItem.dt_txt;
-        const temperature = forecastItem.main.temp;
-        const description = forecastItem.weather[0].desccription;
+        const kelvinTemp = forecastItem.main.temp;
+        const celsiusTemp = Math.round(kelvinToCelsius(kelvinTemp));
+
+        // Adds a check to ensure temperature values are reasonable
+        if (celsiusTemp > -100 && celsiusTemp < 100) {
+            const fahrenheitTemp = convertCelsiusToFahrenheit(celsiusTemp);
+            const description = forecastItem.weather[0].description;
 
         // Create HTML elements for forecast item
         const forecastItemHTML = `
             <li>
                 <strong>Date:</strong> ${date} |
-                <strong>Temperature:</strong> ${temperature}&deg;C |
+                <strong>Temperature:</strong> ${celsiusTemp}&deg;C (${fahrenheitTemp}&deg;F) |
                 <strong>Description:</strong> ${description}
             </li>
         `;
 
         // Appends the forecast item to the forecastDisplay container
         forecastDisplay.append(forecastItemHTML);
+        } else {
+            console.error('Invalid temperature value:', celsiusTemp);
+        }
     }
 }
 
