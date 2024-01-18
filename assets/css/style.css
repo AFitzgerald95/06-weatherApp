@@ -1,5 +1,18 @@
-#recentSearches li:hover {
-    color:blue
+:root {
+    --mustard: #F0C725 ;
+}
+
+
+* {
+    margin: .5%;
+    color: var(--mustard);
+}
+    #recentSearches li:hover {
+    color:var(--mustard)
+}
+
+input {
+    color: black;
 }
 
 #weatherIcon {
@@ -10,3 +23,63 @@ h6 {
 display: none;
 }
 
+#navBar {
+    border: solid 5px black;
+    background-color: #3B6E9A;
+}
+
+header {
+    position: relative;
+    top: 0;
+    left: 40%;
+}
+
+#weatherDashboard {
+    color: var(--mustard) ;
+}
+
+#forecastDisplay {
+    list-style-type: none;
+}
+
+#forecastDisplay .forecast-row {
+    display: flex;
+    flex-direction: column;
+}
+
+#forecastDisplay .forecast-item {
+    border: 1px solid black;
+    padding: 10x;
+    margin: 5px;
+    text-align: center;
+}
+
+#recentSearches:hover {
+    color: black;
+}
+
+#recentSearches {
+    list-style-type: none;
+}
+
+main {
+    border: solid 5px black;
+    background-color: #3B6E9A
+}
+
+input::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+.textTheme {
+    color: var(--mustard);
+}
+
+.hide {
+    display: none;
+}
+
+.border {
+    border: 2px solid black;
+}

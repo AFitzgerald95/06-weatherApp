@@ -1,6 +1,7 @@
 const apiKey = '332f3501fcaba0b14a6a6b60060dfea9';
 
 let searchBtn = $('#searchBtn');
+let mainContent = $('main');
 let weatherDisplay = $('#weatherDisplay')
 let forecastDisplay = $('#forecastDisplay')
 let locationInput = $('#location')
@@ -12,6 +13,10 @@ $('form').submit(function (event) {
     getWeatherData(userLocation);
 
     updateRecentSearches(userLocation);
+});
+
+searchBtn.click(function(){
+    mainContent.css('display', 'block');
 });
 
 function getWeatherData(location) {
@@ -63,13 +68,12 @@ function updateCurrentWeatherUI(data) {
 
     const kelvinTemp = data.main.temp;
     const celsiusTemp = Math.round(kelvinToCelsius(kelvinTemp));
+    const fahrenheitTemp = Math.round(convertCelsiusToFahrenheit(celsiusTemp));
 
     if (celsiusTemp > -100 && celsiusTemp < 100) {
-        const fahrenheitTemp = convertCelsiusToFahrenheit(celsiusTemp);
-
-
         $('#currentCityName').text(data.name);
         $('#currentDate').text(dayjs().format('MMMM D, YYYY'));
+        $('#currentDescription').text(`${data.weather[0].description}`);
         $('#weatherIcon').attr('src', `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`);
         $('#currentTemperature').html(`Temperature: ${fahrenheitTemp}&deg;F (${celsiusTemp}&deg;C)`);
         $('#currentHumidity').text(`Humidity: ${data.main.humidity}%`);
