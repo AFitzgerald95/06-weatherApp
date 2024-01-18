@@ -42,18 +42,6 @@ header {
     list-style-type: none;
 }
 
-#forecastDisplay .forecast-row {
-    display: flex;
-    flex-direction: column;
-}
-
-#forecastDisplay .forecast-item {
-    border: 1px solid black;
-    padding: 10x;
-    margin: 5px;
-    text-align: center;
-}
-
 #recentSearches:hover {
     color: black;
 }
