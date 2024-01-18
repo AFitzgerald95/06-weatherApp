@@ -1,11 +1,14 @@
+// API Key
 const apiKey = '332f3501fcaba0b14a6a6b60060dfea9';
 
+// Variables
 let searchBtn = $('#searchBtn');
 let mainContent = $('main');
 let weatherDisplay = $('#weatherDisplay')
 let forecastDisplay = $('#forecastDisplay')
 let locationInput = $('#location')
 
+// Runs functions that pull the weather data for the location entered by the user from the Api and updates the recent search history when the submit button is clicked.
 $('form').submit(function (event) {
     event.preventDefault();
     const userLocation = locationInput.val();
@@ -19,9 +22,10 @@ searchBtn.click(function(){
     mainContent.css('display', 'block');
 });
 
+// Pulls 
 function getWeatherData(location) {
     const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`;
-    const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}`
+    const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lattitude}&lon=${longitude}&appid={API key}`
 
     fetch(currentWeatherURL)
         .then(response => {
@@ -70,7 +74,6 @@ function updateCurrentWeatherUI(data) {
     const celsiusTemp = Math.round(kelvinToCelsius(kelvinTemp));
     const fahrenheitTemp = Math.round(convertCelsiusToFahrenheit(celsiusTemp));
 
-    if (celsiusTemp > -100 && celsiusTemp < 100) {
         $('#currentCityName').text(data.name);
         $('#currentDate').text(dayjs().format('MMMM D, YYYY'));
         $('#currentDescription').text(`${data.weather[0].description}`);
@@ -78,9 +81,7 @@ function updateCurrentWeatherUI(data) {
         $('#currentTemperature').html(`Temperature: ${fahrenheitTemp}&deg;F (${celsiusTemp}&deg;C)`);
         $('#currentHumidity').text(`Humidity: ${data.main.humidity}%`);
         $('#currentWindSpeed').text(`Wind Speed: ${data.wind.speed} m/s`);
-    } else {
-        console.error('Invalid temperature value:', celsiusTemp);
-    }
+ 
 }
 
 function updateForecastUI(data) {
