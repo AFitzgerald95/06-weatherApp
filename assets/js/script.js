@@ -25,7 +25,7 @@ searchBtn.click(function(){
 // Pulls 
 function getWeatherData(location) {
     const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`;
-    const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lattitude}&lon=${longitude}&appid={API key}`
+    const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}`
 
     fetch(currentWeatherURL)
         .then(response => {
