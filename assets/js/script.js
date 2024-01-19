@@ -18,11 +18,12 @@ $('form').submit(function (event) {
     updateRecentSearches(userLocation);
 });
 
+// Displays the main area once the search button is clicked
 searchBtn.click(function(){
     mainContent.css('display', 'block');
 });
 
-// Pulls 
+// Pulls the 5 day forecast and current weather data based on the location given by the user.
 function getWeatherData(location) {
     const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`;
     const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}`
@@ -56,15 +57,17 @@ function getWeatherData(location) {
         });
 }
 
+// Converts Celsius to fahrenheit
 function convertCelsiusToFahrenheit(celsius) {
     return (celsius * 9/5) + 32;
 }
 
-
+// Converts Kelvin to Celsius
 function kelvinToCelsius(kelvin) {
         return kelvin - 273.15;
 }
 
+// Updates the current weather for the city given by the user
 function updateCurrentWeatherUI(data) {
     console.log('Weather Data:', data);
 
@@ -84,6 +87,7 @@ function updateCurrentWeatherUI(data) {
  
 }
 
+// Updates the 5 day forecast for the city given by the user
 function updateForecastUI(data) {
     forecastDisplay.empty();
 
@@ -117,6 +121,7 @@ function updateForecastUI(data) {
         }
     }
 
+// Updates the recent searches for different cities
 function updateRecentSearches(city) {
     const recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
 
